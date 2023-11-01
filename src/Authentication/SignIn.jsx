@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, Redirect, useNavigate } from "react-router-dom";
 import { addSession } from "../Redux/Action/ActionSession";
 import { useDispatch, useSelector } from "react-redux";
 import "./Auth.css";
@@ -22,7 +22,7 @@ function SignIn(props) {
   const [checkPush, setCheckPush] = useState(false);
   const [errorLogin, setErrorLogin] = useState(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -80,7 +80,7 @@ function SignIn(props) {
           const query = "?" + queryString.stringify(params);
           const response = await CartAPI.postAddToCart(query);
         }
-        history.push("/");
+        navigate("/");
       }
     };
     fetchData();
