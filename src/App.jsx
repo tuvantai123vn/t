@@ -25,7 +25,7 @@ function App() {
   const {userId} = decodedToken
 
   return (
-    <div className="App">
+    <div>
       <BrowserRouter>
         <Header />
         <Routes>

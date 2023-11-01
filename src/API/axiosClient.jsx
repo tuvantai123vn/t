@@ -2,14 +2,11 @@
 import axios from "axios";
 import queryString from "query-string";
 import Cookies from "universal-cookie";
-require('dotenv').config();
-
-const baseURL = process.env.REACT_APP_API_URL;
 
 // Set up default config for http requests here
 // Please have a look at here `https://github.com/axios/axios#requestconfig` for the full list of configs
 const axiosClient = axios.create({
-  baseURL: baseURL,
+  baseURL: 'https://asm-3-be.vercel.app/',
   headers: {
     "content-type": "application/json",
   },
