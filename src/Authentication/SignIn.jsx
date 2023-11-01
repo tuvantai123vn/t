@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { addSession } from "../Redux/Action/ActionSession";
 import { useDispatch, useSelector } from "react-redux";
 import "./Auth.css";
