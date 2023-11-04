@@ -6,7 +6,7 @@ import Cookies from "universal-cookie";
 // Set up default config for http requests here
 // Please have a look at here `https://github.com/axios/axios#requestconfig` for the full list of configs
 const axiosClient = axios.create({
-  baseURL: 'https://asm-3-be.vercel.app/',
+  baseURL: 'https://asm3-be-4qtm.onrender.com/',
   headers: {
     "content-type": "application/json",
   },
