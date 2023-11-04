@@ -5,16 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Auth.css";
 import queryString from "query-string";
 import CartAPI from "../API/CartAPI";
-import Cookies from 'universal-cookie';
+import { useCookies } from "react-cookie";
 import UserAPI from "../API/UserAPI";
-
 
 function SignIn(props) {
   //listCart được lấy từ redux
   const listCart = useSelector((state) => state.Cart.listCart);
-
+  const [cookies, setCookie] = useCookies(["accessToken"]);
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState(false);
   const [emailRegex, setEmailRegex] = useState(false);
@@ -48,13 +46,17 @@ function SignIn(props) {
     } else if (email && validateEmail(email) && password) {
       try {
         const user = {
-          email, password
-        }
+          email,
+          password,
+        };
         const responseData = await UserAPI.postSignin(user);
-        console.log(responseData);
+        const data = responseData.data;
 
         if (responseData.ok && responseData._id) {
           const action = addSession(localStorage.getItem("id_user"));
+          setCookie("accessToken", data);
+          console.log(cookies);
+          navigate("/");
           dispatch(action);
           setCheckPush(true);
         } else {
