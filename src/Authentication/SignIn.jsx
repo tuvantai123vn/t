@@ -51,6 +51,7 @@ function SignIn(props) {
           email, password
         }
         const responseData = await UserAPI.postSignin(user);
+        console.log(responseData);
 
         if (responseData.ok && responseData._id) {
           const action = addSession(localStorage.getItem("id_user"));
