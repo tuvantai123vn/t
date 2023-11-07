@@ -9,7 +9,6 @@ import { useCookies } from "react-cookie";
 import UserAPI from "../API/UserAPI";
 
 function SignIn(props) {
-  //listCart được lấy từ redux
   const listCart = useSelector((state) => state.Cart.listCart);
   const [cookies, setCookie] = useCookies(["accessToken"]);
   const [email, setEmail] = useState("");
@@ -21,7 +20,6 @@ function SignIn(props) {
   const [errorLogin, setErrorLogin] = useState(false);
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const onChangeEmail = (e) => {
@@ -33,49 +31,46 @@ function SignIn(props) {
   };
 
   const onSubmit = async () => {
-    setErrorEmail(false);
-    setErrorPassword(false);
-    setEmailRegex(false);
+    try {
+      setErrorEmail(false);
+      setErrorPassword(false);
+      setEmailRegex(false);
 
-    if (!email) {
-      setErrorEmail(true);
-    } else if (!validateEmail(email)) {
-      setEmailRegex(true);
-    } else if (!password) {
-      setErrorPassword(true);
-    } else if (email && validateEmail(email) && password) {
-      try {
+      if (!email) {
+        setErrorEmail(true);
+      } else if (!validateEmail(email)) {
+        setEmailRegex(true);
+      } else if (!password) {
+        setErrorPassword(true);
+      } else {
         const user = {
           email,
           password,
         };
         const responseData = await UserAPI.postSignin(user);
         const data = responseData.data;
-        console.log(data);
+        setCookie("accessToken", data);
+          console.log('setcookies', cookies);
 
         if (responseData.ok && responseData._id) {
           const action = addSession(localStorage.getItem("id_user"));
-          setCookie("accessToken", data);
-          console.log(cookies);
-          navigate("/cart");
+          navigate("/");
           dispatch(action);
           setCheckPush(true);
         } else {
           setErrorLogin(true);
         }
-      } catch (error) {
-        console.log(error);
       }
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+      // Handle errors and display user-friendly error messages
     }
   };
 
-  //Hàm này dùng để đưa hết tất cả carts vào API của user
   useEffect(() => {
     const fetchData = async () => {
-      //Lần đầu sẽ không thực hiện insert được vì addCart = ''
-      if (checkPush === true) {
+      if (checkPush) {
         for (let i = 0; i < listCart.length; i++) {
-          //Nó sẽ lấy idUser và idProduct và count cần thêm để gửi lên server
           const params = {
             idUser: localStorage.getItem("id_user"),
             idProduct: listCart[i].idProduct,

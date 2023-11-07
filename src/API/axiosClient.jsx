@@ -17,7 +17,7 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(async (config) => {
   const cookies = new Cookies();
   const accessToken = cookies.get("accessToken");
-  console.log('accessToken', accessToken);
+  // console.log('accessToken', accessToken);
 
   if (accessToken) {
     config.headers["authorization"] = "Bearer " + accessToken;
