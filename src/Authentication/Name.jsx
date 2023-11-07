@@ -5,12 +5,12 @@ import { useCookies } from "react-cookie";
 
 function Name() {
   const [userName, setUserName] = useState("");
-  const [cookies, setCookie] = useCookies(["accessToken"]);
+  
 
   useEffect(() => {
-    
+    const [cookies, setCookie] = useCookies(["accessToken"]);
     if (cookies) {
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode(cookies);
       const {name} = decodedToken;
       console.log(decodedToken);
 
