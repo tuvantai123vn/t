@@ -49,13 +49,13 @@ function SignIn(props) {
         };
         const responseData = await UserAPI.postSignin(user);
         const data = responseData.data;
-        setCookie("accessToken", data, {maxAge: 7200});
+
+        if (responseData) {
+          const action = addSession(data);
+          dispatch(action);
+          setCookie("accessToken", data, {maxAge: 7200});
           console.log('setcookies', cookies);
           navigate("/");
-
-        if (responseData.ok && responseData._id) {
-          const action = addSession(localStorage.getItem("id_user"));
-          dispatch(action);
           setCheckPush(true);
         } else {
           setErrorLogin(true);
