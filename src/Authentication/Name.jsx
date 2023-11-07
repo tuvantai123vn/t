@@ -9,6 +9,7 @@ function Name() {
 
   useEffect(() => {
     const [cookies, setCookie] = useCookies(["accessToken"]);
+    console.log(cookies);
     if (cookies) {
       const decodedToken = jwtDecode(cookies);
       const {name} = decodedToken;
