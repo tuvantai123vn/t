@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import socketIOClient from "socket.io-client";
 import "./Chat.css";
 import MessengerApi from "../../API/MessengerAPI";
+import Cookies from "universal-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const host = "http://localhost:5001";
 
@@ -11,9 +13,24 @@ function Chat() {
   const [textMessage, setTextMessage] = useState("");
   const [id, setId] = useState("");
   const [load, setLoad] = useState(false);
+  const cookies = new Cookies();
+
 
   const socketRef = useRef();
   const messagesEnd = useRef();
+
+  useEffect(() => {
+
+    const cookie = cookies.get("accessToken");
+    if (cookie) {
+      const decodedToken = jwtDecode(cookie);
+      // const {_id} = decodedToken;
+      console.log(decodedToken);
+
+      // setId(_id);
+    }
+  }, []);
+  // console.log(id);
 
   const scrollToBottom = () => {
     if (messagesEnd.current) { 
@@ -23,10 +40,10 @@ function Chat() {
 
   const fetchData = async () => {
     try {
-      const response = await MessengerApi.getMessage(
-        localStorage.getItem("id_user")
-      );
-      setMessage(response.data);
+      // if(id){
+      // const response = await MessengerApi.getMessage(id);
+      // setMessage(response.data);
+      // }
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
