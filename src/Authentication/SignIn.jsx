@@ -49,7 +49,7 @@ function SignIn(props) {
         };
         const responseData = await UserAPI.postSignin(user);
         const data = responseData.data;
-        setCookie("accessToken", data);
+        setCookie("accessToken", data, {maxAge: 7200});
           console.log('setcookies', cookies);
 
         if (responseData.ok && responseData._id) {
