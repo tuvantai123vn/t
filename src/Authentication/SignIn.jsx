@@ -57,7 +57,7 @@ function SignIn(props) {
           const action = addSession(localStorage.getItem("id_user"));
           setCookie("accessToken", data);
           console.log(cookies);
-          navigate("/");
+          navigate("/cart");
           dispatch(action);
           setCheckPush(true);
         } else {
