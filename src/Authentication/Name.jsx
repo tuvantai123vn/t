@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import Cookies from "universal-cookie";
+import { useCookies } from "react-cookie";
 
 function Name() {
   const [userName, setUserName] = useState("");
-  const cookies = new Cookies();
+  const [cookies, setCookie] = useCookies(["accessToken"]);
 
   useEffect(() => {
-    const token = cookies.get("accessToken");
     
-    if (token) {
+    if (cookies) {
       const decodedToken = jwtDecode(token);
       const {name} = decodedToken;
       console.log(decodedToken);
