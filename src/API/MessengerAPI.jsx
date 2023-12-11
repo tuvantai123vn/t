@@ -2,7 +2,7 @@ import axiosClient from './axiosClient';
 
 const MessengerAPI = {
 	getMessage: (query) => {
-		const url = `/auth/mess/${query}`;
+		const url = `/mess/${query}`;
 		return axiosClient.get(url);
 	},
 

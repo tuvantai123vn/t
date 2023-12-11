@@ -4,8 +4,9 @@ import "./Chat.css";
 import MessengerApi from "../../API/MessengerAPI";
 import Cookies from "universal-cookie";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
-const host = "http://localhost:5001";
+const host = "https://asm3-be-4qtm.onrender.com/";
 
 function Chat() {
   const [message, setMessage] = useState([]);
@@ -14,53 +15,55 @@ function Chat() {
   const [id, setId] = useState("");
   const [load, setLoad] = useState(false);
   const cookies = new Cookies();
-
+  const navigate = useNavigate();
+  const [decodedToken, setDecodedToken] = useState([]);
 
   const socketRef = useRef();
   const messagesEnd = useRef();
 
   useEffect(() => {
-
     const cookie = cookies.get("accessToken");
     if (cookie) {
-      const decodedToken = jwtDecode(cookie);
-      // const {_id} = decodedToken;
-      console.log(decodedToken);
-
-      // setId(_id);
+      setDecodedToken(jwtDecode(cookie));
+      const { userId } = decodedToken;
+      setId(userId);
+    } else {
+      navigate("/login");
     }
   }, []);
-  // console.log(id);
 
   const scrollToBottom = () => {
-    if (messagesEnd.current) { 
+    if (messagesEnd.current) {
       messagesEnd.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const fetchData = async () => {
     try {
-      // if(id){
-      // const response = await MessengerApi.getMessage(id);
-      // setMessage(response.data);
-      // }
+      if (id) {
+        const response = await MessengerApi.getMessage(id);
+        setMessage(response.data);
+        console.log('data', response.data);
+      }
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
-  
+  console.log('data', message);
 
   const handlerSend = () => {
     if (socketRef.current && textMessage.trim() !== "") {
       const value = {
         content: textMessage,
-        id: localStorage.getItem("id_user"),
-        name: localStorage.getItem('name_user'),
+        id: decodedToken.userId,
+        name: decodedToken.name,
         isAdmin: false,
       };
-      socketRef.current.emit("send_message", value);
-      setTextMessage("");
-      setLoad(true);
+      if (socketRef.current) {
+        socketRef.current.emit("send_message", value);
+        setTextMessage("");
+        setLoad(true);
+      }
     }
   };
 
@@ -77,7 +80,6 @@ function Chat() {
   const onChat = () => {
     setActiveChat((prevActiveChat) => !prevActiveChat);
   };
-  
 
   useEffect(() => {
     socketRef.current = socketIOClient.connect(host);
@@ -151,30 +153,35 @@ function Chat() {
                   </a>
                 </div>
                 <div className="ps-container ps-theme-default ps-active-y fix_scoll">
-                  {message && message.content.map((contentItem, index) =>
-                    contentItem.isAdmin ? (
-                      <div className="media media-chat" key={index}>
-                        <img
-                          className="avatar"
-                          src="https://img.icons8.com/color/36/000000/administrator-male.png"
-                          alt="..."
-                        />
-                        <div className="media-body">
-                          <p>ADMIN: {contentItem.message}</p>
+                  {message && message.content && message.content.length > 0 ? (
+                    message.content.map((contentItem, index) =>
+                      contentItem.isAdmin ? (
+                        <div className="media media-chat" key={index}>
+                          <img
+                            className="avatar"
+                            src="https://img.icons8.com/color/36/000000/administrator-male.png"
+                            alt="..."
+                          />
+                          <div className="media-body">
+                            <p>ADMIN: {contentItem.message}</p>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div
-                        className="media media-chat media-chat-reverse"
-                        key={index}
-                      >
-                        <div className="media-body">
-                          <p>{contentItem.message}</p>
+                      ) : (
+                        <div
+                          className="media media-chat media-chat-reverse"
+                          key={index}
+                        >
+                          <div className="media-body">
+                            <p>{contentItem.message}</p>
+                          </div>
                         </div>
-                      </div>
+                      )
                     )
+                  ) : (
+                    <div>No messages available</div>
                   )}
-                   <div ref={messagesEnd}></div>
+
+                  <div ref={messagesEnd}></div>
                 </div>
                 <div className="publisher bt-1 border-light">
                   <img
