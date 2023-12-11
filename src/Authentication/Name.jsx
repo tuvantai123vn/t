@@ -13,7 +13,6 @@ function Name() {
     const cookie = cookies.get("accessToken");
       if (cookie) {
       const decodedToken = jwtDecode(cookie);
-      console.log(decodedToken);
       const {name} = decodedToken;
       console.log(decodedToken);
 

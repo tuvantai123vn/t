@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import HistoryAPI from "../../API/HistoryAPI";
+import HistoryAPI from "../API/HistoryAPI";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "universal-cookie";
 
@@ -27,12 +27,12 @@ function MainHistory(props) {
         id: userId,
       };
       const response = await HistoryAPI.getHistoryAPI(params.id);
+      console.log('data',response);
       setListCart(response.data);
     };
 
     fetchData();
   }, []);
-  console.log(listCart);
 
   return (
     <div className="container">
