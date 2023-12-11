@@ -12,13 +12,15 @@ function LoginLink(props) {
 
   const onRedirect = () => {
     axios
-      .post("http://localhost:5001/auth/logout", { cookie })
+      .post("https://asm3-be-4qtm.onrender.com/auth/logout", { cookie })
       .then((response) => {
         cookies.remove("accessToken");
         console.log("logout");
         console.log(cookie);
         const action = deleteSession("");
         dispatch(action);
+
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
