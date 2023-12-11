@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ListCart from "./Component/ListCart";
 import alertify from "alertifyjs";
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartAPI from "../API/CartAPI";
 import convertMoney from "../convertMoney";
 import queryString from "query-string";
@@ -15,6 +15,8 @@ function Cart(props) {
   const [cart, setCart] = useState([]);
 
   const [total, setTotal] = useState();
+
+  const navigate = useNavigate();
 
   //State dùng để Load dữ liệu từ Redux
   const [loadRedux, setLoadRedux] = useState({
@@ -149,7 +151,7 @@ function Cart(props) {
   };
 
   //Hàm này dùng để redirect đến page checkout
-  const [redirect, setRedirect] = useState(false);
+  const [Redirect, setRedirect] = useState(false);
 
   const onCheckout = () => {
     if (!localStorage.getItem("id_user")) {
@@ -209,7 +211,7 @@ function Cart(props) {
                   </Link>
                 </div>
                 <div className="col-md-6 text-md-right">
-                  {redirect && redirect("/checkout")}
+                  {Redirect && navigate("/checkout")}
                   <span
                     className="btn btn-outline-dark btn-sm"
                     onClick={onCheckout}

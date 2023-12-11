@@ -5,9 +5,6 @@ import CheckoutAPI from '../API/CheckoutAPI';
 import convertMoney from '../convertMoney';
 import './Checkout.css';
 
-import io from 'socket.io-client';
-// const socket = io('http://localhost:5000');
-
 function Checkout(props) {
 	const [carts, setCarts] = useState([]);
 
@@ -30,6 +27,7 @@ function Checkout(props) {
 	const [success, setSuccess] = useState(false);
 
 	const [load, setLoad] = useState(false);
+	const [user , setUser ] = useState([]);
 
 	//Hàm này dùng để gọi API và render số sản phẩm
 	useEffect(() => {
@@ -41,7 +39,9 @@ function Checkout(props) {
 
 				const response = await CartAPI.getCarts(params.idUser);
 
-				console.log(response);
+				console.log(response.data);
+				
+				setUser(response.data);
 
 				setCarts(response.data.cart);
 
@@ -325,7 +325,7 @@ function Checkout(props) {
 											Your order
 										</h5>
 										<ul className='list-unstyled mb-0'>
-											{/* {carts &&
+											{carts &&
 												carts.map((value) => (
 													<div key={value._id}>
 														<li className='d-flex align-items-center justify-content-between'>
@@ -342,7 +342,7 @@ function Checkout(props) {
 														</li>
 														<li className='border-bottom my-2'></li>
 													</div>
-												))} */}
+												))}
 											<li className='d-flex align-items-center justify-content-between'>
 												<strong className='text-uppercase small font-weight-bold'>
 													Total
