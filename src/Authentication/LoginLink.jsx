@@ -15,8 +15,8 @@ function LoginLink(props) {
       .post("https://asm3-be-4qtm.onrender.com/auth/logout", { cookie })
       .then((response) => {
         cookies.remove("accessToken");
-        console.log(cookie);
         sessionStorage.clear();
+        localStorage.clear();
         const action = deleteSession("");
         dispatch(action);
 
