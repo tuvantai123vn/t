@@ -32,6 +32,15 @@ function Chat() {
     }
   }, []);
 
+  useEffect(() => {
+    fetchData();
+    setLoad(false);
+  }, [load]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [message]);
+
   const scrollToBottom = () => {
     if (messagesEnd.current) {
       messagesEnd.current.scrollIntoView({ behavior: "smooth" });
@@ -40,16 +49,16 @@ function Chat() {
 
   const fetchData = async () => {
     try {
-      if (id) {
-        const response = await MessengerApi.getMessage(id);
-        setMessage(response.data);
-        console.log('data', response.data);
-      }
+      const response = await MessengerApi.getMessage(
+        localStorage.getItem("id_user")
+      );
+      setMessage(response.data.content);
+      console.log("data", response.data);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
-  console.log('data', message);
+  console.log("data", message);
 
   const handlerSend = () => {
     if (socketRef.current && textMessage.trim() !== "") {
@@ -96,15 +105,6 @@ function Chat() {
       socketRef.current.disconnect();
     };
   }, []);
-
-  useEffect(() => {
-    fetchData();
-    setLoad(false);
-  }, [load]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [message]);
 
   return (
     <>
@@ -153,8 +153,8 @@ function Chat() {
                   </a>
                 </div>
                 <div className="ps-container ps-theme-default ps-active-y fix_scoll">
-                  {message && message.content && message.content.length > 0 ? (
-                    message.content.map((contentItem, index) =>
+                  {message &&
+                    message.map((contentItem, index) =>
                       contentItem.isAdmin ? (
                         <div className="media media-chat" key={index}>
                           <img
@@ -176,11 +176,7 @@ function Chat() {
                           </div>
                         </div>
                       )
-                    )
-                  ) : (
-                    <div>No messages available</div>
-                  )}
-
+                    )}
                   <div ref={messagesEnd}></div>
                 </div>
                 <div className="publisher bt-1 border-light">
