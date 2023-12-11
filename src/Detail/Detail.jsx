@@ -8,11 +8,17 @@ import CartAPI from "../API/CartAPI";
 import queryString from "query-string";
 import CommentAPI from "../API/CommentAPI";
 import convertMoney from "../convertMoney";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "universal-cookie";
 
 function Detail(props) {
   const [detail, setDetail] = useState({});
 
   const dispatch = useDispatch();
+  const cookies = new Cookies();
+  const cookie = cookies.get("accessToken");
+  const decodedToken = jwtDecode(cookie);
+  const { userId } = decodedToken;
 
   //id params cho từng sản phẩm
   const { id } = useParams();
@@ -77,8 +83,8 @@ function Detail(props) {
   const addToCart = () => {
     let id_user_cart = "";
 
-    if (localStorage.getItem("id_user")) {
-      id_user_cart = localStorage.getItem("id_user");
+    if (userId) {
+      id_user_cart = userId;
     } else {
       id_user_cart = id_user;
     }
@@ -92,7 +98,7 @@ function Detail(props) {
       img: detail.img1,
     };
 
-    if (localStorage.getItem("id_user")) {
+    if (userId) {
       console.log("Bạn Đã Đăng Nhập!");
 
       const fetchPost = async () => {

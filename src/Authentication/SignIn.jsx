@@ -7,6 +7,7 @@ import queryString from "query-string";
 import CartAPI from "../API/CartAPI";
 import { useCookies } from "react-cookie";
 import UserAPI from "../API/UserAPI";
+import { jwtDecode } from "jwt-decode";
 
 function SignIn(props) {
   const listCart = useSelector((state) => state.Cart.listCart);
@@ -51,10 +52,12 @@ function SignIn(props) {
         const data = responseData.data;
 
         if (responseData) {
-          const action = addSession(data);
+          const decodedToken = jwtDecode(data);
+
+          const action = addSession(decodedToken.userId);
+          localStorage.setItem('id_user', decodedToken.userId);
           dispatch(action);
           setCookie("accessToken", data, {maxAge: 7200});
-          console.log('setcookies', cookies);
           navigate("/");
           setCheckPush(true);
         } else {
