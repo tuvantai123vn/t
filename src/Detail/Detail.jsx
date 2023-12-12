@@ -6,7 +6,6 @@ import alertify from "alertifyjs";
 import { addCart } from "../Redux/Action/ActionCart";
 import CartAPI from "../API/CartAPI";
 import queryString from "query-string";
-import CommentAPI from "../API/CommentAPI";
 import convertMoney from "../convertMoney";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "universal-cookie";
@@ -17,7 +16,7 @@ function Detail(props) {
   const dispatch = useDispatch();
   const cookies = new Cookies();
   const cookie = cookies.get("accessToken");
-  const decodedToken = jwtDecode(cookie);
+  const decodedToken = cookie ? jwtDecode(cookie) : {};
   const { userId } = decodedToken;
 
   //id params cho từng sản phẩm
@@ -73,6 +72,8 @@ function Detail(props) {
     fetchData();
   }, [id]);
 
+  console.log(detail);
+
   //Phần này dùng để xem review hay description
   const [review, setReview] = useState("description");
   const handlerReview = (value) => {
@@ -86,7 +87,7 @@ function Detail(props) {
     if (userId) {
       id_user_cart = userId;
     } else {
-      id_user_cart = id_user;
+      id_user_cart = '';
     }
 
     const data = {
@@ -139,64 +140,32 @@ function Detail(props) {
                   data-slider-id="1"
                 >
                   <div className="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0">
-                    {detail.img1 && detail.img1.startsWith("http") ? (
-                      <img
-                        className="d-block w-100"
-                        src={detail.img1}
-                        alt="First slide"
-                      />
-                    ) : (
-                      <img
-                        className="d-block w-100"
-                        src={`http://localhost:5001/${detail.img1}`}
-                        alt="First slide"
-                      />
-                    )}
+                    <img
+                      className="d-block w-100"
+                      src={detail.img1}
+                      alt="First slide"
+                    />
                   </div>
                   <div className="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0">
-                    {detail.img2 && detail.img2.startsWith("http") ? (
-                      <img
-                        className="d-block w-100"
-                        src={detail.img2}
-                        alt="First slide"
-                      />
-                    ) : (
-                      <img
-                        className="d-block w-100"
-                        src={`http://localhost:5001/${detail.img2}`}
-                        alt="First slide"
-                      />
-                    )}
+                    <img
+                      className="d-block w-100"
+                      src={detail.img2}
+                      alt="First slide"
+                    />
                   </div>
                   <div className="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0">
-                    {detail.img3 && detail.img3.startsWith("http") ? (
-                      <img
-                        className="d-block w-100"
-                        src={detail.img3}
-                        alt="First slide"
-                      />
-                    ) : (
-                      <img
-                        className="d-block w-100"
-                        src={`http://localhost:5001/${detail.img3}`}
-                        alt="First slide"
-                      />
-                    )}
+                    <img
+                      className="d-block w-100"
+                      src={detail.img3}
+                      alt="First slide"
+                    />
                   </div>
                   <div className="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0">
-                    {detail.img4 && detail.img4.startsWith("http") ? (
-                      <img
-                        className="d-block w-100"
-                        src={detail.img4}
-                        alt="First slide"
-                      />
-                    ) : (
-                      <img
-                        className="d-block w-100"
-                        src={`http://localhost:5001/${detail.img4}`}
-                        alt="First slide"
-                      />
-                    )}
+                    <img
+                      className="d-block w-100"
+                      src={detail.img4}
+                      alt="First slide"
+                    />
                   </div>
                 </div>
               </div>
@@ -208,64 +177,32 @@ function Detail(props) {
               >
                 <div className="carousel-inner owl-carousel product-slider">
                   <div className="carousel-item active">
-                    {detail.img1 && detail.img1.startsWith("http") ? (
-                      <img
-                        className="d-block w-100"
-                        src={detail.img1}
-                        alt="First slide"
-                      />
-                    ) : (
-                      <img
-                        className="d-block w-100"
-                        src={`http://localhost:5001/${detail.img1}`}
-                        alt="First slide"
-                      />
-                    )}
+                    <img
+                      className="d-block w-100"
+                      src={detail.img1}
+                      alt="First slide"
+                    />
                   </div>
                   <div className="carousel-item">
-                    {detail.img2 && detail.img2.startsWith("http") ? (
-                      <img
-                        className="d-block w-100"
-                        src={detail.img2}
-                        alt="First slide"
-                      />
-                    ) : (
-                      <img
-                        className="d-block w-100"
-                        src={`http://localhost:5001/${detail.img2}`}
-                        alt="First slide"
-                      />
-                    )}
+                    <img
+                      className="d-block w-100"
+                      src={detail.img2}
+                      alt="First slide"
+                    />
                   </div>
                   <div className="carousel-item">
-                    {detail.img3 && detail.img3.startsWith("http") ? (
-                      <img
-                        className="d-block w-100"
-                        src={detail.img3}
-                        alt="First slide"
-                      />
-                    ) : (
-                      <img
-                        className="d-block w-100"
-                        src={`http://localhost:5001/${detail.img3}`}
-                        alt="First slide"
-                      />
-                    )}
+                    <img
+                      className="d-block w-100"
+                      src={detail.img3}
+                      alt="First slide"
+                    />
                   </div>
                   <div className="carousel-item">
-                    {detail.img && detail.img4.startsWith("http") ? (
-                      <img
-                        className="d-block w-100"
-                        src={detail.img4}
-                        alt="First slide"
-                      />
-                    ) : (
-                      <img
-                        className="d-block w-100"
-                        src={`http://localhost:5001/${detail.img4}`}
-                        alt="First slide"
-                      />
-                    )}
+                    <img
+                      className="d-block w-100"
+                      src={detail.img4}
+                      alt="First slide"
+                    />
                   </div>
                 </div>
                 <a
